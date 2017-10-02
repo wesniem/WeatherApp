@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Main;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Weather;
@@ -29,20 +27,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class SearchWeatherFragment extends Fragment implements View.OnClickListener {
+/**
+ * Created by wesniemarcelin on 10/2/17.
+ */
+
+public class ViewSavedWeatherFragment extends Fragment {
+    ImageView savedWeatherIcon;
+    TextView savedWeatherCity;
+    TextView savedWeatherDescription;
+    SharedPreferences mySharedPrefs;
     private static String TAG = "YOOOO";
     private static String BASE_URL = "http://api.openweathermap.org/data/2.5/";
     private static final String API_KEY = "1eb0319a72231ce4d37d1da905ccbec2";
-    public static final String MyPREFERENCES = "myprefs";
-    SharedPreferences sharedpreferences;
+    String savedCityName;
     List<Weather_> mWeatherList;
-    Bundle bundle;
     Float mWindSpeed;
     Float currentTemp;
-    Button submitCityBtn;
-    ImageView viewIcon;
-    EditText cityEditText;
-    String cityName;
     String weatherDescription;
     String mainWeatherType;
     String url;
@@ -50,34 +50,20 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mroot = inflater.inflate(R.layout.activity_search_weather_fragment, container, false);
-        sharedpreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        submitCityBtn = (Button) mroot.findViewById(R.id.submit_city);
-        cityEditText = (EditText) mroot.findViewById(R.id.city_editText);
-        viewIcon = (ImageView) mroot.findViewById(R.id.view_icon);
-        bundle = new Bundle();
-        submitCityBtn.setOnClickListener(this);
-        return mroot;
+        View mSavedWeatherRoot = inflater.inflate(R.layout.view_saved_weather_fragment, container, false);
+        savedWeatherIcon = (ImageView) mSavedWeatherRoot.findViewById(R.id.saved_weather_icon);
+        savedWeatherCity = (TextView) mSavedWeatherRoot.findViewById(R.id.saved_weather_city);
+        savedWeatherDescription = (TextView) mSavedWeatherRoot.findViewById(R.id.saved_weather_temp);
+        mySharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        savedCityName = mySharedPrefs.getString("cityName", "defaultStringIfNothingFound");
+        findCurrentSavedWeather();
+        return mSavedWeatherRoot;
     }
 
+    private void findCurrentSavedWeather() {
+        Log.d("FIND SAVED WEATHER", "SAVED LOCATION: " + mySharedPrefs.getString("cityName1", "defaultStringIfNothingFound"));
 
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.submit_city:
-                cityName = cityEditText.getText().toString();
-                Log.d(TAG, "onClick worked! for " + cityName);
-                sharedpreferences.edit().putString("cityName",cityName).apply();
-                bundle.putString("location",cityName);
-                fetchWeather();
-                break;
-
-        }
-    }
-
-
-    private void fetchWeather() {
+        //Retrofit Call
         //Retrofit Call
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -86,9 +72,9 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
 
         //Service Call
         WeatherService weatherService = retrofit.create(WeatherService.class);
-        Call<Weather> call = weatherService.getWeather(cityName, API_KEY);
-        final Call<Wind> windCall = weatherService.getWind(cityName, API_KEY);
-        final Call<Main> mainCall = weatherService.getMainConditions(cityName, API_KEY);
+        Call<Weather> call = weatherService.getWeather(savedCityName, API_KEY);
+        final Call<Wind> windCall = weatherService.getWind(savedCityName, API_KEY);
+        final Call<Main> mainCall = weatherService.getMainConditions(savedCityName, API_KEY);
 
 
         //Asynchronous Calls to determine success or failure
@@ -108,7 +94,7 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
                 mainWeatherType = mWeatherList.get(0).getMain();
                 weatherDescription = mWeatherList.get(0).getDescription();
 
-                downloadIconImage(url);
+                displayCurrentSavedWeather(url);
 //                viewIcon.setImageURI(imageUri);
 
                 Log.d(TAG, "Success, in thereeeee" + API_KEY);
@@ -122,8 +108,6 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
                         mWindSpeed = wind.getSpeed();
 
                         Log.d("Wind is", "Pojo " + mWindSpeed);
-
-
                     }
 
                     @Override
@@ -143,9 +127,6 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
                         String currentTempString = currentTemp.toString();
                         Log.d("Current Temp is", "Pojo " + currentTemp);
 
-
-                        viewWeather();
-
                     }
 
                     @Override
@@ -153,8 +134,6 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
                         Log.d("MAYDAY FOR MAIN CALL!", t.getMessage());
                     }
                 });
-
-
             }
 
             @Override
@@ -164,42 +143,12 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         });
     }
 
-    private void downloadIconImage(String url) {
+    private void displayCurrentSavedWeather(String url) {
         Picasso.with(getContext())
                 .load(url)
-                .into(viewIcon);
-    }
+                .into(savedWeatherIcon);
 
-    private void viewWeather() {
-        // Create new fragment and transaction to allow user to view the weather for the location provided
-        Log.e(TAG, "Viewing Weather: ");
-        Fragment newFragment = new ViewWeatherFragment();
-        bundle.putString("icon", url);
-        bundle.putString("description", weatherDescription);
-        bundle.putString("main", mainWeatherType);
-        bundle.putFloat("windSpeed", mWindSpeed);
-        bundle.putFloat("currentTemp",currentTemp);
-        newFragment.setArguments(bundle);
-
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.activity_main_fragment, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null){
-            //Restore fragments state here
-        }
-    }
-
-        @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("location",cityName);
-        Log.d("ON SAVED INSTANCE STATE", "onSaveInstanceState: ");
+        savedWeatherCity.setText(savedCityName);
+        savedWeatherDescription.setText(weatherDescription);
     }
 }
