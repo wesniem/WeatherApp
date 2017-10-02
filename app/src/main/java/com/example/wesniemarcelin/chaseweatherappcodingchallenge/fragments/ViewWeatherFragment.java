@@ -1,4 +1,4 @@
-package com.example.wesniemarcelin.chaseweatherappcodingchallenge;
+package com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.wesniemarcelin.chaseweatherappcodingchallenge.R;
 import com.squareup.picasso.Picasso;
 
 

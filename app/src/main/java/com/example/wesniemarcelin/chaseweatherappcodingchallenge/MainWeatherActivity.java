@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments.SearchWeatherFragment;
+import com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments.ViewSavedWeatherFragment;
+
 public class MainWeatherActivity extends AppCompatActivity {
     Fragment mContent;
     SharedPreferences prefs = null;

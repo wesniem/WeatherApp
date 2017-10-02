@@ -1,4 +1,4 @@
-package com.example.wesniemarcelin.chaseweatherappcodingchallenge;
+package com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.wesniemarcelin.chaseweatherappcodingchallenge.R;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Main;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Weather;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Weather_;
@@ -63,7 +64,6 @@ public class ViewSavedWeatherFragment extends Fragment {
     private void findCurrentSavedWeather() {
         Log.d("FIND SAVED WEATHER", "SAVED LOCATION: " + mySharedPrefs.getString("cityName1", "defaultStringIfNothingFound"));
 
-        //Retrofit Call
         //Retrofit Call
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

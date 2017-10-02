@@ -1,4 +1,4 @@
-package com.example.wesniemarcelin.chaseweatherappcodingchallenge;
+package com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.wesniemarcelin.chaseweatherappcodingchallenge.R;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Main;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Weather;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Weather_;
@@ -84,7 +85,7 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        //Service Call
+        //Service Call to retrieve response from OpenWeather API
         WeatherService weatherService = retrofit.create(WeatherService.class);
         Call<Weather> call = weatherService.getWeather(cityName, API_KEY);
         final Call<Wind> windCall = weatherService.getWind(cityName, API_KEY);
@@ -188,14 +189,14 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         transaction.commit();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState != null){
-            //Restore fragments state here
-        }
-    }
-
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        if(savedInstanceState != null){
+//            //Restore fragments state here
+//        }
+//    }
+//
         @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
