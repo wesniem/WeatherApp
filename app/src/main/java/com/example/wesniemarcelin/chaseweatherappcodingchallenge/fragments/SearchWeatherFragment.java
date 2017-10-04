@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.R;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Main;
@@ -47,6 +48,8 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
     String weatherDescription;
     String mainWeatherType;
     String url;
+    String getUserInput;
+    Boolean savedInstanceStateExists;
 
     @Nullable
     @Override
@@ -58,21 +61,36 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         viewIcon = (ImageView) mroot.findViewById(R.id.view_icon);
         bundle = new Bundle();
         submitCityBtn.setOnClickListener(this);
+
+        if (savedInstanceState != null) {
+            savedInstanceStateExists = true;
+            getUserInput = savedInstanceState.getString("location");
+            if (!(getUserInput.isEmpty())) {
+                cityName = getUserInput;
+            } else {
+                savedInstanceStateExists = false;
+            }
+        }
+//        Log.d("MY INSTANCE STATE", "The instance saved is " + getUserInput);
+
         return mroot;
     }
-
 
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.submit_city:
+                if (savedInstanceStateExists) {
+                    Log.d(TAG, "onClick worked! for " + cityName);
+                    sharedpreferences.edit().putString("cityName", cityName).apply();
+                    bundle.putString("location", cityName);
+                    fetchWeather();
+                    break;
+                }
+                Toast.makeText(getContext(), "Please enter a valid input", Toast.LENGTH_LONG).show();
                 cityName = cityEditText.getText().toString();
-                Log.d(TAG, "onClick worked! for " + cityName);
-                sharedpreferences.edit().putString("cityName",cityName).apply();
-                bundle.putString("location",cityName);
-                fetchWeather();
-                break;
+
 
         }
     }
@@ -179,7 +197,7 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         bundle.putString("description", weatherDescription);
         bundle.putString("main", mainWeatherType);
         bundle.putFloat("windSpeed", mWindSpeed);
-        bundle.putFloat("currentTemp",currentTemp);
+        bundle.putFloat("currentTemp", currentTemp);
         newFragment.setArguments(bundle);
 
 
@@ -189,18 +207,16 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         transaction.commit();
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        if(savedInstanceState != null){
-//            //Restore fragments state here
-//        }
-//    }
-//
-        @Override
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("location",cityName);
-        Log.d("ON SAVED INSTANCE STATE", "onSaveInstanceState: ");
+        cityName = cityEditText.getText().toString();
+        outState.putString("location", cityName);
+        Log.d("ON SAVED INSTANCE STATE", "onSaveInstanceState: " + cityName);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
     }
 }
