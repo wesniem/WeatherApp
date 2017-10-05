@@ -60,6 +60,7 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         cityEditText = (EditText) mroot.findViewById(R.id.city_editText);
         viewIcon = (ImageView) mroot.findViewById(R.id.view_icon);
         bundle = new Bundle();
+        savedInstanceStateExists = false;
         submitCityBtn.setOnClickListener(this);
 
         if (savedInstanceState != null) {

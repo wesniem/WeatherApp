@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -18,14 +19,22 @@ public class MainWeatherActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_fragment_layout);
+        FragmentManager fm = getSupportFragmentManager();
+        mContent = fm.findFragmentByTag("fragmentTag");
         prefs = getSharedPreferences("com.example.wesniemarcelin.chaseweatherappcodingchallenge", MODE_PRIVATE);
 
-
-        if(savedInstanceState != null){
-            Log.d("onSaveInstanceState", "onCreate: of Activity");
-
-            mContent = getSupportFragmentManager().getFragment(savedInstanceState,"SearchFragment");
+        if(mContent == null){
+            FragmentTransaction ft = fm.beginTransaction();
+            mContent = new SearchWeatherFragment();
+            ft.add(android.R.id.content,mContent,"fragmentTag");
+            ft.commit();
         }
+
+//        if(savedInstanceState != null){
+//            Log.d("onSaveInstanceState", "onCreate: of Activity");
+//
+//            mContent = getSupportFragmentManager().getFragment(savedInstanceState,"SearchFragment");
+//        }
     }
 
     @Override
@@ -52,10 +61,10 @@ public class MainWeatherActivity extends AppCompatActivity {
             prefs.edit().putBoolean("firstrun", false).apply();
         }
         else {
-            Log.d("ON RESUME: ", "THis is not the first time");
+            Log.d("ON RESUME: ", "This is not the first time");
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
-                    .add(R.id.activity_main_fragment, new ViewSavedWeatherFragment())
+                    .replace(R.id.activity_main_fragment, new ViewSavedWeatherFragment())
                     .commit();
 
         }
