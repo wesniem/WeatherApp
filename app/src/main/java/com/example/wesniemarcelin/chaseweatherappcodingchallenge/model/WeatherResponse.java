@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class WeatherResponse {
+    //Getters and setters to handle response from Open Weather API
     List<Weather> weather;
     Main main;
     Wind wind;
@@ -14,15 +15,13 @@ public class WeatherResponse {
     String name;
     int cod;
 
-    public class Weather{
+    public class Weather {
+
         int id;
         String main;
         String description;
         String icon;
 
-        public int getId() {
-            return id;
-        }
 
         public String getMain() {
             return main;
@@ -37,7 +36,8 @@ public class WeatherResponse {
         }
     }
 
-    public class Main{
+    public class Main {
+
         Double temp;
         Double pressure;
         Double humidity;
@@ -47,30 +47,17 @@ public class WeatherResponse {
         public Double getTemp() {
             return temp;
         }
-
-        public Double getPressure() {
-            return pressure;
-        }
-
-        public Double getHumidity() {
-            return humidity;
-        }
-
-        public Double getTemp_min() {
-            return temp_min;
-        }
-
-        public Double getTemp_max() {
-            return temp_max;
-        }
     }
-    public class Wind{
+
+    public class Wind {
+
         Double speed;
 
         public Double getSpeed() {
             return speed;
         }
     }
+
     public List<Weather> getWeather() {
         return weather;
     }
@@ -83,15 +70,7 @@ public class WeatherResponse {
         return wind;
     }
 
-    public long getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public int getCod() {
-        return cod;
     }
 }

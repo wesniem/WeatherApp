@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.wesniemarcelin.chaseweatherappcodingchallenge.fragments.SearchWeatherFragment">
+    tools:context="com.example.wesniemarcelin.chaseweatherappcodingchallenge.view.SearchWeatherFragment">
 
     <TextView
         android:id="@+id/city_tv"
@@ -28,12 +28,7 @@
         android:layout_below="@id/city_editText"
         android:layout_centerHorizontal="true"
         android:text="@string/submit_city"
-        android:onClick="fetchWeather"
         />
-    <ImageView
-        android:id="@+id/view_icon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:configChanges="screenSize|orientation"
     android:theme="@style/AppTheme">
-        <activity android:name=".MainWeatherActivity">
+        <activity android:name=".view.MainWeatherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
