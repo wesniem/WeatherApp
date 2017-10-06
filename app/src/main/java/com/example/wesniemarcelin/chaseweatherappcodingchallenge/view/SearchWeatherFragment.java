@@ -95,6 +95,7 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
 
         } else {
             Toast.makeText(getContext(), "City hasn't been specified", Toast.LENGTH_LONG).show();
+            return;
         }
 
         mSearchWeatherPresenter.fetchWeather(mCityName);
