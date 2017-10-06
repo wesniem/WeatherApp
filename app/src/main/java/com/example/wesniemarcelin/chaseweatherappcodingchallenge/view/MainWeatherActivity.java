@@ -11,8 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.R;
-import com.example.wesniemarcelin.chaseweatherappcodingchallenge.view.SearchWeatherFragment;
-import com.example.wesniemarcelin.chaseweatherappcodingchallenge.view.ViewSavedWeatherFragment;
 import com.example.wesniemarcelin.chaseweatherappcodingchallenge.presenter.SearchWeatherPresenter;
 
 import butterknife.ButterKnife;
@@ -69,6 +67,7 @@ public class MainWeatherActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_fragment, new SearchWeatherFragment())
+                    .addToBackStack(null)
                     .commit();
 
             Log.d("ON RESUME: ", "This is the first time");
@@ -78,6 +77,7 @@ public class MainWeatherActivity extends AppCompatActivity {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_fragment, new ViewSavedWeatherFragment())
+                    .addToBackStack(null)
                     .commit();
 
         }
