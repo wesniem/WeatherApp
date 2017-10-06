@@ -35,8 +35,6 @@ import static com.example.wesniemarcelin.chaseweatherappcodingchallenge.model.Co
 
 public class SearchWeatherFragment extends Fragment implements View.OnClickListener, WeatherView {
     public static final String MyPREFERENCES = "myprefs";
-    //    Button submitCityBtn;
-//    EditText cityEditText;
     String cityName;
     String getUserInput;
     Boolean savedInstanceStateExists;
@@ -64,9 +62,6 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
         if (!sharedpreferences.getString(LAST_CITY_SEARCHED, NO_CITY_SEARCHED).equalsIgnoreCase(NO_CITY_SEARCHED)) {
             mSearchWeatherPresenter.fetchWeather(sharedpreferences.getString(LAST_CITY_SEARCHED, NO_CITY_SEARCHED));
         }
-//        submitCityBtn = (Button) mroot.findViewById(R.id.submit_city);
-//        cityEditText = (EditText) mroot.findViewById(R.id.city_editText);
-//        viewIcon = (ImageView) mroot.findViewById(R.id.view_icon);
 //        bundle = new Bundle();
 //        savedInstanceStateExists = false;
 //
@@ -79,8 +74,6 @@ public class SearchWeatherFragment extends Fragment implements View.OnClickListe
 //                savedInstanceStateExists = false;
 //            }
 //        }
-//        Log.d("MY INSTANCE STATE", "The instance saved is " + getUserInput);
-
         return mroot;
     }
 
